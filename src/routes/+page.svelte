@@ -100,6 +100,8 @@
 			onclick={() => copyToClipboard()}
 			><ClipboardCopy /> Copy CSV
 		</button>
+	{:else}
+		<div class="font-bold">Unable to retrieve event info (maybe a stale event?).</div>
 	{/if}
 
 	{#if copiedText}
