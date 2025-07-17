@@ -9,6 +9,7 @@
 	let displayedEventInfo = $derived.by(() => {
 		return eventInfo === null ? '' : JSON.stringify(eventInfo, null, 2);
 	});
+	let fetchFailed = $state(false);
 
 	let lineItems = $derived.by(() => {
 		return eventInfo === null
@@ -24,9 +25,7 @@
 					eventInfo.name,
 					eventInfo.link,
 					eventInfo.accessible,
-					eventInfo.recurring,
-					'' + (eventInfo.coordinates?.lat ?? ''),
-					'' + (eventInfo.coordinates?.lon ?? '')
+					eventInfo.recurring
 				];
 	});
 	let html = $derived.by(() => {
@@ -42,6 +41,7 @@
 		event.preventDefault();
 		working = true;
 		eventInfo = null;
+		fetchFailed = false;
 
 		const res = await fetch('/', {
 			method: 'POST',
@@ -49,10 +49,14 @@
 			body: JSON.stringify({ urlText })
 		});
 
+		eventInfo = null;
+		fetchFailed = true;
 		if (res.ok) {
-			eventInfo = (await res.json()).result as EventInfo;
-		} else {
-			eventInfo = null;
+			const data = await res.json();
+			if (data.result) {
+				eventInfo = data.result as EventInfo;
+				fetchFailed = false;
+			}
 		}
 
 		working = false;
@@ -76,39 +80,45 @@
 </script>
 
 <div class="m-8">
-	<form onsubmit={handleSubmit}>
-		<label for="url" class="mb-1 block font-medium">Mobilize.us URL</label>
-		<input
-			id="url"
-			type="text"
-			bind:value={urlText}
-			placeholder="Enter URL"
-			required
-			class="w-128 rounded border px-2"
-		/>
-		<button type="submit" class="ml-2 cursor-pointer rounded bg-blue-600 px-3 py-1 text-white">
-			Submit
-		</button>
+	<form onsubmit={handleSubmit} class="w-full">
+		<div class="flex w-full max-w-[30rem] flex-row flex-nowrap items-center">
+			<input
+				id="url"
+				type="text"
+				bind:value={urlText}
+				placeholder="Enter mobile.us URL"
+				required
+				class="flex-1 rounded border px-2"
+			/>
+			<button
+				type="submit"
+				class="ml-2 flex-none cursor-pointer rounded bg-blue-600 px-3 py-1 text-white"
+			>
+				Submit
+			</button>
+		</div>
 	</form>
 
-	{#if working}
-		<p class="mt-4 text-gray-500 italic">Working…</p>
-	{:else if eventInfo}
-		<pre class="mt-4 font-semibold text-green-700">{displayedEventInfo}</pre>
-		<button
-			class="mt-2 cursor-pointer rounded bg-blue-600 px-3 py-1 text-white"
-			onclick={() => copyToClipboard()}
-			><ClipboardCopy /> Copy CSV
-		</button>
-	{:else}
-		<div class="font-bold">Unable to retrieve event info (maybe a stale event?).</div>
-	{/if}
+	<div class="mt-4">
+		{#if working}
+			<p class="text-gray-500 italic">Working…</p>
+		{:else if eventInfo}
+			<pre class="mt-4 font-semibold text-green-700">{displayedEventInfo}</pre>
+			<button
+				class="mt-2 flex cursor-pointer flex-row flex-nowrap items-center gap-1 rounded bg-blue-600 px-3 py-1 text-white"
+				onclick={() => copyToClipboard()}
+				><ClipboardCopy /> Copy CSV
+			</button>
+		{:else if fetchFailed}
+			<div class="font-bold">Unable to retrieve event info (maybe a stale event?).</div>
+		{/if}
+	</div>
 
 	{#if copiedText}
 		<div class="mt-4">
 			<div class="font-bold">Copied to clipboard, suitable for Excel or Google Sheets:</div>
 
-			<div class="mt-4">{copiedText}'</div>
+			<div class="mt-1 rounded-md bg-gray-300 p-5">{copiedText}</div>
 		</div>
 	{/if}
 </div>

@@ -2,7 +2,6 @@ import { load } from 'cheerio';
 import vm from 'vm';
 import type { EventInfo, Nullable } from './types';
 import { fetchHtml, formatDate } from './util';
-import type { time } from 'console';
 
 export async function fetchEventLinkLocationInfo(url: string): Promise<Nullable<EventInfo>> {
 	if (!url) {
