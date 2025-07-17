@@ -4,7 +4,7 @@
 	import { ClipboardCopy } from '@lucide/svelte';
 	import { tick } from 'svelte';
 
-	let urlText = $state('https://www.mobilize.us/mobilize/event/808563/');
+	let urlText = $state('');
 	let eventInfo: Nullable<EventInfo> = $state(null);
 	let displayedEventInfo = $derived.by(() => {
 		return eventInfo === null ? '' : JSON.stringify(eventInfo, null, 2);
@@ -65,12 +65,12 @@
 
 <div class="m-8">
 	<form onsubmit={handleSubmit}>
-		<label for="url" class="mb-1 block font-medium">Source URL</label>
+		<label for="url" class="mb-1 block font-medium">Mobilize.us URL</label>
 		<input
 			id="url"
 			type="text"
 			bind:value={urlText}
-			placeholder="Enter a protest url"
+			placeholder="Enter URL"
 			required
 			class="w-128 rounded border px-2"
 		/>
