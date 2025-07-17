@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { EventInfo, Nullable } from '$lib/types';
-	import { safeCopyToClipboard, toCsvLine } from '$lib/util';
+	import { toHtmlTableLine, toCsvLine } from '$lib/util';
 	import { ClipboardCopy } from '@lucide/svelte';
 	import { tick } from 'svelte';
 
@@ -9,10 +9,11 @@
 	let displayedEventInfo = $derived.by(() => {
 		return eventInfo === null ? '' : JSON.stringify(eventInfo, null, 2);
 	});
-	let csv = $derived.by(() => {
+
+	let lineItems = $derived.by(() => {
 		return eventInfo === null
-			? ''
-			: toCsvLine([
+			? []
+			: [
 					eventInfo.date,
 					eventInfo.time,
 					eventInfo.address,
@@ -26,7 +27,13 @@
 					eventInfo.recurring,
 					'' + (eventInfo.coordinates?.lat ?? ''),
 					'' + (eventInfo.coordinates?.lon ?? '')
-				]);
+				];
+	});
+	let html = $derived.by(() => {
+		return toHtmlTableLine(lineItems);
+	});
+	let csv = $derived.by(() => {
+		return toCsvLine(lineItems);
 	});
 	let working = $state(false);
 	let copiedText: string | undefined = $state();
@@ -52,7 +59,12 @@
 	}
 
 	async function copyToClipboard() {
-		await safeCopyToClipboard(csv);
+		await navigator.clipboard.write([
+			new ClipboardItem({
+				'text/html': new Blob([html], { type: 'text/html' }),
+				'text/plain': new Blob([csv], { type: 'text/plain' })
+			})
+		]);
 		copiedText = csv;
 
 		// Wait a bit, then clear the message
@@ -78,22 +90,23 @@
 			Submit
 		</button>
 	</form>
+
+	{#if working}
+		<p class="mt-4 text-gray-500 italic">Working…</p>
+	{:else if eventInfo}
+		<pre class="mt-4 font-semibold text-green-700">{displayedEventInfo}</pre>
+		<button
+			class="mt-2 cursor-pointer rounded bg-blue-600 px-3 py-1 text-white"
+			onclick={() => copyToClipboard()}
+			><ClipboardCopy /> Copy CSV
+		</button>
+	{/if}
+
+	{#if copiedText}
+		<div class="mt-4">
+			<div class="font-bold">Copied to clipboard, suitable for Excel or Google Sheets:</div>
+
+			<div class="mt-4">{copiedText}'</div>
+		</div>
+	{/if}
 </div>
-
-{#if working}
-	<p class="mt-4 text-gray-500 italic">Working…</p>
-{:else if eventInfo}
-	<pre class="mt-4 font-semibold text-green-700">{displayedEventInfo}</pre>
-	<button
-		class="ml-2 cursor-pointer rounded bg-blue-600 px-3 py-1 text-white"
-		onclick={() => copyToClipboard()}
-		><ClipboardCopy /> Copy CSV
-	</button>
-{/if}
-
-{#if copiedText}
-	<div class="copied-popup">
-		Copied to clipboard:
-		<div class="mt-4">{copiedText}'</div>
-	</div>
-{/if}

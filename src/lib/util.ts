@@ -39,23 +39,15 @@ export function toCsvLine(values: string[]): string {
 		.join(',');
 }
 
-export async function safeCopyToClipboard(text: string) {
-	try {
-		if (navigator.clipboard?.writeText) {
-			await navigator.clipboard.writeText(text);
-		} else {
-			// Fallback using older execCommand API
-			const textarea = document.createElement('textarea');
-			textarea.value = text;
-			textarea.setAttribute('readonly', '');
-			textarea.style.position = 'absolute';
-			textarea.style.left = '-9999px';
-			document.body.appendChild(textarea);
-			textarea.select();
-			document.execCommand('copy');
-			document.body.removeChild(textarea);
-		}
-	} catch (err) {
-		console.error('Copy failed:', err);
-	}
+export function toHtmlTableLine(values: string[]): string {
+	return `
+    <table><tr>${values.map((v) => `<td>${escapeHtml(v)}</td>`).join('')}</tr></table>
+  `;
+}
+
+function escapeHtml(str: string): string {
+	return str.replace(
+		/[&<>"']/g,
+		(c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' })[c]!
+	);
 }
