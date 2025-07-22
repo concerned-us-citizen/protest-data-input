@@ -1,9 +1,15 @@
-// src/lib/server/sqlJsInstance.ts
-import initSqlJs, { type SqlJsStatic } from 'sql.js/dist/sql-wasm.js';
+import type { SqlJsStatic } from 'sql.js';
+import wasmUrl from 'sql.js/dist/sql-wasm.wasm?url';
 
-let sqlJs: Promise<SqlJsStatic> | null = null;
+let sqlJsPromise: Promise<SqlJsStatic> | undefined;
 
 export function getSqlJs(): Promise<SqlJsStatic> {
-	if (!sqlJs) sqlJs = initSqlJs(); // Wasm bytes are embedded → no path issues
-	return sqlJs;
+	if (!sqlJsPromise) {
+		sqlJsPromise = import('sql.js').then(({ default: init }) =>
+			init({
+				locateFile: () => wasmUrl // point to the bundled asset
+			})
+		);
+	}
+	return sqlJsPromise;
 }
