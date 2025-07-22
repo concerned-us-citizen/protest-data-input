@@ -89,7 +89,6 @@ async function fetchMobilizeEventLinkLocationInfo(url: string): Promise<Nullable
 	try {
 		vm.runInNewContext(dataScriptWithWindowDefined, context);
 		const embeddedData = context.window['__MLZ_EMBEDDED_DATA__'];
-		//const embeddedData = clientVars['__MLZ_EMBEDDED_DATA__'];
 		const eventInfo = embeddedData.data.event as any;
 		const timeRanges: DateAndTimeRange[] = eventInfo.times.map(
 			(t: { start: string; end: string }) => ({

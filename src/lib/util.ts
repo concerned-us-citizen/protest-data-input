@@ -51,3 +51,12 @@ function escapeHtml(str: string): string {
 		(c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' })[c]!
 	);
 }
+
+export const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const loggingEnabled = false;
+export function log(s: string, arg?: unknown) {
+	if (loggingEnabled) {
+		console.log(s, arg);
+	}
+}
