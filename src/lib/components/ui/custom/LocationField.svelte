@@ -3,6 +3,7 @@
 	import { getMatchingLocations } from '$lib/client/getValues';
 	import { getStateInfo } from '$lib/usStateInfo';
 	import { log } from '$lib/util';
+	import { onMount } from 'svelte';
 	import TypeaheadField from './TypeaheadField.svelte';
 
 	let {
@@ -29,6 +30,11 @@
 	$effect(() => {
 		locationQuery = city;
 		log(`LocationField.locationQuery update, updated locationQuery to: city='${city}'`);
+	});
+
+	// Warm up the server so the first autocomplete is responsive
+	onMount(() => {
+		debouncedFetchLocationMatches('warmup');
 	});
 </script>
 
