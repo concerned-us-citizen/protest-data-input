@@ -337,16 +337,16 @@
 			description="For mobilize.us sources, we'll attempt to fill in values from the given URL. This should work if the event is in the future."
 		>
 			<form onsubmit={populateFromMobilize} class="w-full">
-				<div class="flex w-full flex-row items-center gap-2">
+				<div class="flex w-full flex-row flex-wrap items-center gap-2">
 					<InputField
 						id="mobilize-url"
-						class="flex-1"
+						class="min-w-48 flex-1"
 						placeholder="https://www.mobilize.us/mobilize/event/EVENT_NUMBER/"
 						bind:value={mobilizeUrl}
 					/>
 					<button
 						type="submit"
-						class="flex-none cursor-pointer rounded bg-blue-600 px-3 py-1 text-white"
+						class="ml-auto shrink-0 cursor-pointer rounded bg-blue-600 px-3 py-1 text-white"
 					>
 						Fetch Values
 					</button>
