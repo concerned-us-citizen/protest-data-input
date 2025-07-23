@@ -19,4 +19,12 @@
 	}>();
 </script>
 
-<Input {id} {type} class={className} bind:value {placeholder} onblur={onBlur} />
+<Input
+	{id}
+	{type}
+	name="notsearch_password"
+	class={className}
+	bind:value
+	{placeholder}
+	onblur={onBlur}
+/>
