@@ -236,14 +236,16 @@
 
 	async function copyToClipboard() {
 		addressError = undefined;
-		if (!(await validateAll())) return;
 
+		// We have to do this first, to keep it on the same activation as the user click for safari's sake.
+		// Not strictly correct...
 		await navigator.clipboard.write([
 			new ClipboardItem({
 				'text/html': new Blob([html], { type: 'text/html' }),
 				'text/plain': new Blob([csv], { type: 'text/plain' })
 			})
 		]);
+		if (!(await validateAll())) return;
 		copiedText = csv;
 	}
 
@@ -379,13 +381,13 @@
 					</div>
 
 					<FormField label="Event Name" required>
-						<EventNameField id="event-name" bind:name />
+						<EventNameField id="ff_ev_nm" bind:name />
 					</FormField>
 
 					{#if source === 'event'}
 						<FormField label="Street Address" error={errors.address}>
 							<InputField
-								id="address"
+								id="ff_loc_a"
 								onBlur={() => validateField('address')}
 								bind:value={address}
 							/>
@@ -404,10 +406,10 @@
 							required
 							error={errors.city}
 						>
-							<LocationField id="location" bind:city bind:stateName />
+							<LocationField id="ff_loc" bind:city bind:stateName />
 						</FormField>
 						<FormField label="State" required error={errors.state} class="w-18">
-							<StateField id="state" bind:stateName />
+							<StateField id="ff_st" bind:stateName />
 						</FormField>
 						{#if source === 'event'}
 							<FormField label="Zip" error={errors.zip} class="w-20">
