@@ -392,35 +392,30 @@
 						</FormField>
 					{/if}
 
-					<div class="flex flex-row items-end gap-3">
-						{#if source === 'turnout'}
-							<FormField label="Start Zip" error={errors.zip} class="w-20">
-								<InputField id="zip" onBlur={() => validateField('zip')} bind:value={zip} />
-							</FormField>
-						{/if}
+					<div class="flex flex-row flex-wrap items-end gap-3">
 						<FormField
-							class="flex-1"
+							class="min-w-48 flex-1"
 							label="Region (City, County, Park, etc.)"
 							required
 							error={errors.city}
 						>
 							<LocationField id="ff_loc" bind:city bind:stateName />
 						</FormField>
-						<FormField label="State" required error={errors.state} class="w-18">
-							<StateField id="ff_st" bind:stateName />
-						</FormField>
-						{#if source === 'event'}
+						<div class="flex flex-row flex-wrap items-end gap-3">
+							<FormField label="State" required error={errors.state} class="w-18">
+								<StateField id="ff_st" bind:stateName />
+							</FormField>
 							<FormField label="Zip" error={errors.zip} class="w-20">
 								<InputField id="zip" onBlur={() => validateField('zip')} bind:value={zip} />
 							</FormField>
-						{/if}
-						<FormField label="Country" class="w-14">
-							<InputField
-								id="country"
-								onBlur={() => validateField('country')}
-								bind:value={country}
-							/>
-						</FormField>
+							<FormField label="Country" class="w-14">
+								<InputField
+									id="country"
+									onBlur={() => validateField('country')}
+									bind:value={country}
+								/>
+							</FormField>
+						</div>
 					</div>
 					<FormField label="Event URL" error={errors.link}>
 						<InputField
