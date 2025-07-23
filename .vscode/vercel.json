@@ -1,7 +1,8 @@
 {
 	"functions": {
 		"*.func": {
-			"includeFiles": "node_modules/sql.js/dist/sql-wasm.wasm"
+			"includeFiles": "node_modules/sql.js/dist/sql-wasm.wasm",
+			"runtime": "nodejs18.x"
 		}
 	}
 }

@@ -47,9 +47,7 @@
 		timeZone: tz
 	});
 	let dateString = $derived.by(() => {
-		const result = fmt.format(date?.toDate(tz));
-		console.log(`result='${result}'`);
-		return result;
+		return fmt.format(date?.toDate(tz));
 	});
 
 	let lineItems = $derived.by(() => {
