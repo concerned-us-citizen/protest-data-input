@@ -67,7 +67,7 @@
 						recurring
 					]
 				: [dateString, zip, city, stateName, name, low, high, link, coverage]
-		).map((s) => s.trim());
+		).map((s) => (s ?? '').trim());
 	});
 	let html = $derived.by(() => {
 		return toHtmlTableLine(lineItems);
@@ -270,14 +270,14 @@
 				const rawDate = new Date(mobilizeResult.date);
 				date = new CalendarDate(rawDate.getFullYear(), rawDate.getMonth() + 1, rawDate.getDate());
 
-				address = mobilizeResult.address;
-				zip = mobilizeResult.zip;
-				city = mobilizeResult.city;
-				stateName = mobilizeResult.state;
-				name = mobilizeResult.name;
-				link = mobilizeResult.link;
-				time = mobilizeResult.time;
-				country = mobilizeResult.country;
+				address = mobilizeResult.address ?? '';
+				zip = mobilizeResult.zip ?? '';
+				city = mobilizeResult.city ?? '';
+				stateName = mobilizeResult.state ?? '';
+				name = mobilizeResult.name ?? '';
+				link = mobilizeResult.link ?? '';
+				time = mobilizeResult.time ?? '';
+				country = mobilizeResult.country ?? '';
 
 				fetchFailed = false;
 			}
