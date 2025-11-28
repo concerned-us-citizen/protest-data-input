@@ -343,6 +343,7 @@
 						class="min-w-48 flex-1"
 						placeholder="https://www.mobilize.us/mobilize/event/EVENT_NUMBER/"
 						bind:value={mobilizeUrl}
+						showClearButton={true}
 					/>
 					<button
 						type="submit"
