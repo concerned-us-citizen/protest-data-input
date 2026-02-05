@@ -112,7 +112,8 @@ async function fetchMobilizeEventLinkLocationInfo(url: string): Promise<Nullable
 			coordinates: {
 				lat: eventInfo.lat,
 				lon: eventInfo.lon
-			}
+			},
+			organizer: eventInfo.organization.name
 		};
 	} catch (e) {
 		console.error('Failed to evaluate JS', e);

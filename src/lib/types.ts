@@ -17,4 +17,5 @@ export interface EventInfo {
 	accessible: string;
 	recurring: string;
 	coordinates: Nullable<Coordinates>;
+	organizer: string;
 }

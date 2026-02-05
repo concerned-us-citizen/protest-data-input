@@ -38,6 +38,7 @@
 	let coverage = $state('');
 	let accessible = $state('');
 	let recurring = $state('');
+	let organizer = $state('');
 
 	const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
 	const fmt = new Intl.DateTimeFormat('en-US', {
@@ -64,7 +65,8 @@
 						name,
 						link,
 						accessible,
-						recurring
+						recurring,
+						organizer
 					]
 				: [dateString, zip, city, stateName, name, low, high, link, coverage]
 		).map((s) => (s ?? '').trim());
@@ -91,7 +93,8 @@
 			high,
 			coverage,
 			accessible,
-			recurring
+			recurring,
+			organizer
 		};
 	});
 
@@ -109,7 +112,8 @@
 				high,
 				coverage,
 				accessible,
-				recurring
+				recurring,
+				organizer
 			].some((val) => val.length > 0) ||
 			date !== undefined ||
 			copiedText !== undefined
@@ -278,6 +282,7 @@
 				link = mobilizeResult.link ?? '';
 				time = mobilizeResult.time ?? '';
 				country = mobilizeResult.country ?? '';
+				organizer = mobilizeResult.organizer ?? '';
 
 				fetchFailed = false;
 			}
@@ -296,6 +301,7 @@
 		link = '';
 		time = '';
 		country = 'US';
+		organizer = '';
 		mobilizeUrl = '';
 		copiedText = undefined;
 		addressError = undefined;
@@ -424,6 +430,13 @@
 							placeholder="https://your_event_source.com"
 							bind:value={link}
 							onBlur={() => validateField('link')}
+						/>
+					</FormField>
+					<FormField label="Organizer" error={errors.organizer}>
+						<InputField
+							id="organizer"
+							onBlur={() => validateField('organizer')}
+							bind:value={organizer}
 						/>
 					</FormField>
 					{#if source === 'turnout'}
