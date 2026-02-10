@@ -412,10 +412,10 @@
 							<FormField label="State" required error={errors.state} class="w-18">
 								<StateField id="ff_st" bind:stateName />
 							</FormField>
-							<FormField label="Zip" error={errors.zip} class="w-20">
+							<FormField label="Zip" error={errors.zip} class="w-22">
 								<InputField id="zip" onBlur={() => validateField('zip')} bind:value={zip} />
 							</FormField>
-							<FormField label="Country" class="w-14">
+							<FormField label="Country" class="w-16">
 								<InputField
 									id="country"
 									onBlur={() => validateField('country')}
@@ -497,7 +497,7 @@
 		{:else}
 			<div class="mt-6 text-sm text-gray-600">
 				Please complete the following required fields to enable copying:
-				<ul class="ml-6 mt-2 list-disc">
+				<ul class="mt-2 ml-6 list-disc">
 					{#if !date}
 						<li>Date</li>
 					{/if}
