@@ -494,6 +494,24 @@
 			{#if copiedText}
 				<Step stepNumber={5} label="Paste into Excel or Google Sheets"></Step>
 			{/if}
+		{:else}
+			<div class="mt-6 text-sm text-gray-600">
+				Please complete the following required fields to enable copying:
+				<ul class="ml-6 mt-2 list-disc">
+					{#if !date}
+						<li>Date</li>
+					{/if}
+					{#if name.length === 0}
+						<li>Event Name</li>
+					{/if}
+					{#if city.length === 0}
+						<li>Region (City, County, Park, etc.)</li>
+					{/if}
+					{#if stateName.length === 0}
+						<li>State</li>
+					{/if}
+				</ul>
+			</div>
 		{/if}
 
 		{#if addressError}
